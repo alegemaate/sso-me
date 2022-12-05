@@ -25,3 +25,7 @@ region=<your value>
 ```
 
 Then run `sso-me` to login to aws using SSO and write credentials to your aws credentials file.
+
+## Disclaimer
+
+I do not accept responsibility for any effects, adverse or otherwise, that this code may have on you, your computer, your sanity, your dog, and anything else that you can think of. Use it at your own risk.
