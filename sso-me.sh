@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CREDENTIAL_NAME=${1:-default}
+
 # Colors
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -90,11 +92,15 @@ echo -e "${GREEN}Done!${NC}\n";
 
 echo -e "${WHITE}Writing credentials${NC}";
 
-AWS_CREDENTIALS="[default]\n"
+AWS_CREDENTIALS="[${CREDENTIAL_NAME}]\n"
 AWS_CREDENTIALS+="aws_access_key_id=$(echo $CREDS | jq -r '.roleCredentials.accessKeyId')\n"
 AWS_CREDENTIALS+="aws_secret_access_key=$(echo $CREDS | jq -r '.roleCredentials.secretAccessKey')\n"
-AWS_CREDENTIALS+="aws_session_token=$(echo $CREDS | jq -r '.roleCredentials.sessionToken')"
-echo -e $AWS_CREDENTIALS > ~/.aws/credentials
+AWS_CREDENTIALS+="aws_session_token=$(echo $CREDS | jq -r '.roleCredentials.sessionToken')\n"
+
+OTHER_CREDENTIALS=$(sed -n "/${CREDENTIAL_NAME}/,/^$/ !p" ~/.aws/credentials)
+OTHER_CREDENTIALS+="\n"
+ 
+(echo -e "$AWS_CREDENTIALS" ;echo -e "$OTHER_CREDENTIALS") > ~/.aws/credentials
 
 echo -e "${GREEN}Done!${NC}\n";
 
